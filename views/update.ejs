@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form action="/xulyupdate" method="post">
+      <input type="hidden" name="id" value="<%=id%>">
+      <input type="text" name="title" placeholder="title" value="<%=sanPham.title%>"><br><br>
+      <input type="text" name="desc" placeholder="desc" value="<%=sanPham.desc%>"><br><br>
+      <input type="text" name="image" placeholder="image" value="<%=sanPham.hinh%>"><br><br>
+      <input type="text" name="idPhim" placeholder="id" value="<%=sanPham.idPhim%>"><br><br>
+      <input type="submit" value="Update thong tin">
+      <img src="../images/background/<%=sanPham.hinh%>" alt="">
+    </form>
+  </body>
+</html>

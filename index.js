@@ -24,13 +24,39 @@ var parser = bodyParser.urlencoded({extended: false});
 
 app.post('/xulythem', parser, function(req, res){
   var {title, desc, idPhim, image} = req.body;
-  console.log(req.body);
   mangSanPham.push(new SanPham(title, desc, idPhim, image));
   res.redirect('/');
+});
+
+app.post('/xulyupdate', parser, function(req, res){
+  var {id, title, desc, idPhim, image} = req.body;
+  var sp = mangSanPham[id];
+  sp.title = title;
+  sp.desc = desc;
+  sp.idPhim = idPhim;
+  sp.hinh = image;
+  console.log(sp);
+  res.redirect('/list');
 });
 
 app.get('/xoa/:id', (req, res) => {
   var {id} = req.params;
   mangSanPham.splice(id, 1);
   res.redirect('/list');
+});
+
+app.get('/sua/:id', (req, res) => {
+  var {id} = req.params;
+  res.render('update', {id, sanPham: mangSanPham[id]});
+});
+var upload = require('./controls/upload.js')('hinhsanpham');
+app.get('/test', (req, res) => res.render('test'));
+app.post('/xulyhinh', (req, res) => {
+  upload(req, res, (err) => {
+    if(err){
+      res.send('Loi ' + err);
+    }else {
+      res.send('Thanh cong: ' + req.file.filename);
+    }
+  });
 });

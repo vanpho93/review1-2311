@@ -61,71 +61,22 @@ var bgStretch = true;
 		// Every <li> includes Thumbnail, Video or Background Image
 		Caption and Description elementes
 	-->
-	<ul id="bgImages">
-
-
+		<ul id="bgImages">
 				<li>
 					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
+					<iframe src="http://player.vimeo.com/video/192417650?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
 					<h3>NodeJS</h3>
 					<p>NodeJS là một mã nguồn mở</p>
 				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-				<li>
-					<img class="thumb" src="./images/background/18081777_th.jpg" alt="" />
-					<iframe src="http://player.vimeo.com/video/14506031?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
-					<h3>NodeJS</h3>
-					<p>NodeJS là một mã nguồn mở</p>
-				</li>
-
-</ul>
+				<%mangSanPham.forEach(function(e){%>
+					<li>
+						<img class="thumb" src="./images/background/<%=e.hinh%>" alt="" />
+						<iframe src="http://player.vimeo.com/video/<%=e.idPhim%>?api=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;color=7d7d7d" videotype="vimeo" width="400" height="225" frameborder="0" webkitAllowFullScreen allowFullScreen></iframe>
+						<h3><%=e.title%></h3>
+						<p><%=e.desc%></p>
+					</li>
+				<%});%>
+			</ul>
 	<!-- BEGIN: Main Menu -->
 	<div id="menu-container">
 		<!-- BEGIN: Logo -->

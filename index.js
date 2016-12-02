@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var upload = require('./controls/upload.js')('hinhsanpham');
+var del = require('./controls/del.js');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -40,6 +41,7 @@ app.post('/xulyupdate', function(req, res){
     sp.desc = desc;
     sp.idPhim = idPhim;
     if(req.file != undefined){
+      del(sp.hinh);
       sp.hinh = req.file.filename;
     }
     console.log(sp);

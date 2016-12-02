@@ -13,10 +13,24 @@ app.listen(3000, function(){
   console.log('Server started');
 });
 
-app.get('/', function(req, res) {
-  res.render('index_dark', {mangSanPham: mangSanPham});
+app.get('/', (req, res) => res.render('index_dark', {mangSanPham}))
+
+app.get('/admin', (req, res) => res.render('add'));
+
+app.get('/list', (req, res) => res.render('list', {mangSanPham}));
+
+var bodyParser = require('body-parser');
+var parser = bodyParser.urlencoded({extended: false});
+
+app.post('/xulythem', parser, function(req, res){
+  var {title, desc, idPhim, image} = req.body;
+  console.log(req.body);
+  mangSanPham.push(new SanPham(title, desc, idPhim, image));
+  res.redirect('/');
 });
 
-app.get('/home', function(req, res) {
-  res.redirect('/');
-})
+app.get('/xoa/:id', (req, res) => {
+  var {id} = req.params;
+  mangSanPham.splice(id, 1);
+  res.redirect('/list');
+});

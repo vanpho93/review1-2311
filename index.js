@@ -32,15 +32,19 @@ app.post('/xulythem', function(req, res){
   });
 });
 
-app.post('/xulyupdate', parser, function(req, res){
-  var {id, title, desc, idPhim, image} = req.body;
-  var sp = mangSanPham[id];
-  sp.title = title;
-  sp.desc = desc;
-  sp.idPhim = idPhim;
-  sp.hinh = image;
-  console.log(sp);
-  res.redirect('/list');
+app.post('/xulyupdate', function(req, res){
+  upload(req, res, err => {
+    var {id, title, desc, idPhim} = req.body;
+    var sp = mangSanPham[id];
+    sp.title = title;
+    sp.desc = desc;
+    sp.idPhim = idPhim;
+    if(req.file != undefined){
+      sp.hinh = req.file.filename;
+    }
+    console.log(sp);
+    res.redirect('/list');
+  })
 });
 
 app.get('/xoa/:id', (req, res) => {

@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var upload = require('./controls/upload.js')('hinhsanpham');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -22,10 +23,13 @@ app.get('/list', (req, res) => res.render('list', {mangSanPham}));
 var bodyParser = require('body-parser');
 var parser = bodyParser.urlencoded({extended: false});
 
-app.post('/xulythem', parser, function(req, res){
-  var {title, desc, idPhim, image} = req.body;
-  mangSanPham.push(new SanPham(title, desc, idPhim, image));
-  res.redirect('/');
+app.post('/xulythem', function(req, res){
+  upload(req, res, err => {
+    var {title, desc, idPhim} = req.body;
+    var image = req.file.filename;
+    mangSanPham.push(new SanPham(title, desc, idPhim, image));
+    res.redirect('/');
+  });
 });
 
 app.post('/xulyupdate', parser, function(req, res){
@@ -49,7 +53,7 @@ app.get('/sua/:id', (req, res) => {
   var {id} = req.params;
   res.render('update', {id, sanPham: mangSanPham[id]});
 });
-var upload = require('./controls/upload.js')('hinhsanpham');
+
 app.get('/test', (req, res) => res.render('test'));
 app.post('/xulyhinh', (req, res) => {
   upload(req, res, (err) => {

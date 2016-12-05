@@ -38,7 +38,17 @@ function getInfo(id, cb){
   query(`SELECT * FROM "SanPham" WHERE id = ${id}`, cb);
 }
 
-module.exports = {query, getInfo};
+function remove(id, cb){
+  query(`DELETE FROM "SanPham" WHERE id=${id}`, cb)
+}
+
+function update(tensp, mota, hinh, phim, id, cb){
+  query(`UPDATE public."SanPham"
+	SET tensp='${tensp}', mota='${mota}', phim='${phim}', hinh='${hinh}'
+	WHERE id=${id}`, cb);
+}
+
+module.exports = {query, getInfo, remove, update};
 
 // query(`SELECT * FROM "SanPham"`,function(a){
 //   console.log(a.rows);

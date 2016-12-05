@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var upload = require('./controls/upload.js')('hinhsanpham');
 var del = require('./controls/del.js');
-var {query, getInfo} = require('./db.js');
+var {query, getInfo, remove, update} = require('./db.js');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -69,23 +69,18 @@ app.post('/xulythem', function(req, res){
 app.post('/xulyupdate', function(req, res){
   upload(req, res, err => {
     var {id, title, desc, idPhim} = req.body;
-    var sp = mangSanPham[id];
-    sp.title = title;
-    sp.desc = desc;
-    sp.idPhim = idPhim;
-    if(req.file != undefined){
-      del(sp.hinh);
-      sp.hinh = req.file.filename;
-    }
-    console.log(sp);
-    res.redirect('/list');
+    var image = req.file.filename;
+    update(title, desc, image, idPhim, id, () => {
+      res.redirect('/list');
+    })
   })
 });
 
 app.get('/xoa/:id', (req, res) => {
   var {id} = req.params;
-  mangSanPham.splice(id, 1);
-  res.redirect('/list');
+  remove(id, () => {
+    res.redirect('/list');
+  });
 });
 
 app.get('/sua/:id', (req, res) => {

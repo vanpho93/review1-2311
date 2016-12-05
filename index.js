@@ -2,18 +2,7 @@ var express = require('express');
 var app = express();
 var upload = require('./controls/upload.js')('hinhsanpham');
 var del = require('./controls/del.js');
-
-var pg = require('pg');
-var config = {
-  user: 'postgres',
-  password: 'khoapham',
-  host: 'localhost',
-  port: 5432,
-  database: 'EmployeeDB',
-  max: 100,
-  idleTimeoutMillis: 10000
-}
-var pool = new pg.Pool(config);
+var query = require('./db.js');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -29,24 +18,18 @@ app.listen(3000, function(){
 });
 
 app.get('/', (req, res) => {
-  pool.connect((err, client, done) => {
+  query('SELECT * FROM "SanPham"', function(err, result){
     if(err){
-      return console.log('Loi ket noi');
+      return res.send('Loi ' + err);
     }
-    client.query('SELECT * FROM "SanPham"', (err, result) => {
-      if(err){
-        return console.log('Loi truy van');
-      }
-      var mang = [];
-      result.rows.forEach( e => {
-        var {tensp, mota, hinh, phim} = e;
-        mang.push(new SanPham(tensp, mota, phim, hinh));
-      });
-      res.render('index_dark', {mangSanPham: mang})
+    var mang = [];
+    result.rows.forEach( e => {
+      var {tensp, mota, hinh, phim} = e;
+      mang.push(new SanPham(tensp, mota, phim, hinh));
     });
-    done();
+    res.render('index_dark', {mangSanPham: mang});
   });
-})
+});
 
 app.get('/admin', (req, res) => res.render('add'));
 
@@ -60,19 +43,14 @@ app.post('/xulythem', function(req, res){
     var {title, desc, idPhim} = req.body;
     var image = req.file.filename;
 
-    pool.connect((err, client, done) => {
+    query(`INSERT INTO "SanPham"(tensp, mota, hinh, phim)
+    VALUES ('${title}', '${desc}', '${image}', '${idPhim}')`, (err, result) => {
       if(err){
-        return console.log('Loi ket noi');
-      }
-      client.query(`INSERT INTO "SanPham"(tensp, mota, hinh, phim)
-      VALUES ('${title}', '${desc}', '${image}', '${idPhim}')`, (err, result) => {
-        if(err){
-          return console.log('Loi truy van');
-        }
+        res.send('Loi');
+      }else{
         res.redirect('/');
-      })
-    })
-
+      }
+    });
   });
 });
 

@@ -10,21 +10,32 @@ var config = {
 }
 var pool = new pg.Pool(config);
 
-function getData(cb){
+function query(sql, cb){
+  var loi;
+  var ketqua;
+
   pool.connect((err, client, done) => {
     if(err){
+      loi = "Loi ket noi";
+      cb(loi, ketqua);
       return console.log('Loi ket noi');
+
     }
-    client.query('SELECT * FROM "SanPham"', (err, result) => {
+    client.query(sql, (err, result) => {
       if(err){
+        loi = "Loi truy van";
+        cb(loi, ketqua);
         return console.log('Loi truy van');
       }
-      cb(result.rows);
+      ketqua = result
+      cb(loi, ketqua);
     });
     done();
   });
 }
 
-getData(function(a){
-  console.log(a);
-});
+module.exports = query;
+
+// query(`SELECT * FROM "SanPham"`,function(a){
+//   console.log(a.rows);
+// });

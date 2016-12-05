@@ -27,13 +27,13 @@
             </tr>
             <%mangSanPham.forEach(function(e, i){%>
                 <tr>
-                    <td><%=i + 1%></td>
+                    <td><%=i%></td>
                     <td><%=e.title%></td>
                     <td><img src="images/background/<%=e.hinh%>" width="120px"></td>
                     <td><%=e.idPhim%></td>
                     <td>
-                        <a href="/sua/<%=i%>">Sua</a><br/>
-                        <a href="/xoa/<%=i%>">Xoa</a>
+                        <a href="/sua/<%=e.id%>">Sua</a><br/>
+                        <a href="/xoa/<%=e.id%>">Xoa</a>
                     </td>
                 </tr>
             <%})%>

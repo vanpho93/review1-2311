@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var upload = require('./controls/upload.js')('hinhsanpham');
 var del = require('./controls/del.js');
-var query = require('./db.js');
+var {query, getInfo} = require('./db.js');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -33,7 +33,19 @@ app.get('/', (req, res) => {
 
 app.get('/admin', (req, res) => res.render('add'));
 
-app.get('/list', (req, res) => res.render('list', {mangSanPham}));
+app.get('/list', (req, res) =>{
+  query('SELECT * FROM "SanPham"', function(err, result){
+    if(err){
+      return res.send('Loi ' + err);
+    }
+    var mang = [];
+    result.rows.forEach( e => {
+      var {tensp, mota, hinh, phim, id} = e;
+      mang.push(new SanPham(tensp, mota, phim, hinh, id));
+    });
+    res.render('list', {mangSanPham: mang});
+  });
+});
 
 var bodyParser = require('body-parser');
 var parser = bodyParser.urlencoded({extended: false});
@@ -78,7 +90,12 @@ app.get('/xoa/:id', (req, res) => {
 
 app.get('/sua/:id', (req, res) => {
   var {id} = req.params;
-  res.render('update', {id, sanPham: mangSanPham[id]});
+  getInfo(id, (err, result) => {
+    if(err) return res.send('Loi');
+    var {tensp, mota, hinh, phim, id} = result.rows[0];
+    var sanPham = new SanPham(tensp, mota, phim, hinh, id);
+    res.render('update', {id, sanPham});
+  });
 });
 
 app.get('/test', (req, res) => res.render('test'));

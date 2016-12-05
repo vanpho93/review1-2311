@@ -34,7 +34,11 @@ function query(sql, cb){
   });
 }
 
-module.exports = query;
+function getInfo(id, cb){
+  query(`SELECT * FROM "SanPham" WHERE id = ${id}`, cb);
+}
+
+module.exports = {query, getInfo};
 
 // query(`SELECT * FROM "SanPham"`,function(a){
 //   console.log(a.rows);

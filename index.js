@@ -2,6 +2,19 @@ var express = require('express');
 var app = express();
 var upload = require('./controls/upload.js')('hinhsanpham');
 var del = require('./controls/del.js');
+
+var pg = require('pg');
+var config = {
+  user: 'postgres',
+  password: 'khoapham',
+  host: 'localhost',
+  port: 5432,
+  database: 'EmployeeDB',
+  max: 100,
+  idleTimeoutMillis: 10000
+}
+var pool = new pg.Pool(config);
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
@@ -9,13 +22,31 @@ var SanPham = require('./model/SanPham.js');
 var mangSanPham = [
   new SanPham('Android', 'Khoa hoc Android', '192417650','1.png'),
   new SanPham('iOS', 'Khoa hoc iOS', '193884721','2.jpg'),
-  new SanPham('ReactJS', 'Khoa hoc ReactJS', '79437743','18081777_th.jpg')
+  new SanPham('ReactJS', 'Khoa hoc ReactJS', '79437743','3.png')
 ];
 app.listen(3000, function(){
   console.log('Server started');
 });
 
-app.get('/', (req, res) => res.render('index_dark', {mangSanPham}))
+app.get('/', (req, res) => {
+  pool.connect((err, client, done) => {
+    if(err){
+      return console.log('Loi ket noi');
+    }
+    client.query('SELECT * FROM "SanPham"', (err, result) => {
+      if(err){
+        return console.log('Loi truy van');
+      }
+      var mang = [];
+      result.rows.forEach( e => {
+        var {tensp, mota, hinh, phim} = e;
+        mang.push(new SanPham(tensp, mota, phim, hinh));
+      });
+      res.render('index_dark', {mangSanPham: mang})
+    });
+    done();
+  });
+})
 
 app.get('/admin', (req, res) => res.render('add'));
 
@@ -28,8 +59,20 @@ app.post('/xulythem', function(req, res){
   upload(req, res, err => {
     var {title, desc, idPhim} = req.body;
     var image = req.file.filename;
-    mangSanPham.push(new SanPham(title, desc, idPhim, image));
-    res.redirect('/');
+
+    pool.connect((err, client, done) => {
+      if(err){
+        return console.log('Loi ket noi');
+      }
+      client.query(`INSERT INTO "SanPham"(tensp, mota, hinh, phim)
+      VALUES ('${title}', '${desc}', '${image}', '${idPhim}')`, (err, result) => {
+        if(err){
+          return console.log('Loi truy van');
+        }
+        res.redirect('/');
+      })
+    })
+
   });
 });
 
